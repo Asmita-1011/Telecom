@@ -1,0 +1,17 @@
+{
+	"name": "CS-ADF-Dev160301",
+	"properties": {
+		"globalParameters": {
+			"env": {
+				"type": "string",
+				"value": "dev"
+			}
+		}
+	},
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "5b7e646c-c439-4bb5-bf4f-19b3c88c499b",
+		"tenantId": "ac0b3d63-7c45-4c67-aca2-31627a73dc4c"
+	}
+}
