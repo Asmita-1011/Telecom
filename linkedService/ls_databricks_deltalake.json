@@ -5,7 +5,7 @@
 		"type": "AzureDatabricksDeltaLake",
 		"typeProperties": {
 			"domain": "https://adb-7405618528253180.0.azuredatabricks.net",
-			"clusterId": "0107-074409-zqk1v6or",
+			"clusterId": "0108-112731-yks031y3",
 			"workspaceResourceId": "/subscriptions/5221823b-790a-434f-a69e-bc983dc24720/resourceGroups/CS-Dev-environment/providers/Microsoft.Databricks/workspaces/CS-databricks"
 		}
 	},
