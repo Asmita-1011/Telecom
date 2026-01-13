@@ -1,0 +1,12 @@
+{
+	"name": "ds_input_sql_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sqlserver_ssms",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}
