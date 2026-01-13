@@ -91,8 +91,12 @@
 									"referenceName": "ds_input_sql_csv",
 									"type": "DatasetReference",
 									"parameters": {
-										"tableName": {
+										"table_name": {
 											"value": "@item().table_name",
+											"type": "Expression"
+										},
+										"schema_name": {
+											"value": "@item().schema_name",
 											"type": "Expression"
 										}
 									}
@@ -101,9 +105,105 @@
 							"outputs": [
 								{
 									"referenceName": "ds_output_adls_csv",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"adls_container": {
+											"value": "@item().container_name",
+											"type": "Expression"
+										},
+										"adls_file": {
+											"value": "@item().table_name",
+											"type": "Expression"
+										}
+									}
 								}
 							]
+						},
+						{
+							"name": "Ingestion to Silver",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "on_prem_to_adls",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Workspace/Users/moraxzhongli.gi@gmail.com/DB notbooks/NB silver ingestion",
+								"baseParameters": {
+									"catalog_name": "silver",
+									"container_name": "landing",
+									"env": "dev",
+									"schema_mapping": {
+										"value": "@item().schema_mapping",
+										"type": "Expression"
+									},
+									"schema_name": {
+										"value": "@item().schema_name",
+										"type": "Expression"
+									},
+									"table_name": {
+										"value": "@item().table_name",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_databricks_compute",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "File copy Success logs",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "on_prem_to_adls",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Workspace/databricks_notebooks/log_record_tbl_insert",
+								"baseParameters": {
+									"env": {
+										"value": "@pipeline().globalParameters.env",
+										"type": "Expression"
+									},
+									"pipeLineName": {
+										"value": "@pipeline().Pipeline",
+										"type": "Expression"
+									},
+									"status": "Success",
+									"triggerType": {
+										"value": "@pipeline().TriggerType",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_databricks_compute",
+								"type": "LinkedServiceReference"
+							}
 						}
 					]
 				}
