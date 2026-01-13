@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureDatabricksDeltaLakeSource",
 						"query": {
-							"value": "select param.*, control.* from telecom.metadata_schema.tbl_parameters param, telecom.metadata_schema.tbl_source_control control where job_id in (201);",
+							"value": "select param.*, control.* from telecom.metadata_schema.tbl_parameters param, telecom.metadata_schema.tbl_source_control control where job_id in (201,202,203);",
 							"type": "Expression"
 						}
 					},
@@ -189,11 +189,77 @@
 										"value": "@pipeline().globalParameters.env",
 										"type": "Expression"
 									},
+									"loadId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"logMessage": {
+										"value": "@concat('Copied ',item().table_name, ' to landing container')",
+										"type": "Expression"
+									},
+									"logTimeStamp": {
+										"value": "@utcNow()",
+										"type": "Expression"
+									},
 									"pipeLineName": {
 										"value": "@pipeline().Pipeline",
 										"type": "Expression"
 									},
 									"status": "Success",
+									"triggerType": {
+										"value": "@pipeline().TriggerType",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_databricks_compute",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "File copy Failed logs",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "on_prem_to_adls",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Workspace/databricks_notebooks/log_record_tbl_insert",
+								"baseParameters": {
+									"env": {
+										"value": "@pipeline().globalParameters.env",
+										"type": "Expression"
+									},
+									"loadId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"logMessage": {
+										"value": "@activity('on_prem_to_adls').Error.message",
+										"type": "Expression"
+									},
+									"logTimeStamp": {
+										"value": "@utcNow()",
+										"type": "Expression"
+									},
+									"pipeLineName": {
+										"value": "@pipeline().Pipeline",
+										"type": "Expression"
+									},
+									"status": "Fail",
 									"triggerType": {
 										"value": "@pipeline().TriggerType",
 										"type": "Expression"
