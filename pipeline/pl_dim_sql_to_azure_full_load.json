@@ -1,5 +1,5 @@
 {
-	"name": "1a_pl_dim_sql_to_azure_full_load",
+	"name": "pl_dim_sql_to_azure_full_load",
 	"properties": {
 		"activities": [
 			{
