@@ -1,0 +1,50 @@
+{
+	"name": "pl_Silver_Ingestion_Full_load",
+	"properties": {
+		"activities": [
+			{
+				"name": "Ingestion to Silver",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Workspace/Users/moraxzhongli.gi@gmail.com/DB notbooks/NB silver ingestion",
+					"baseParameters": {
+						"catalog_name": "silver",
+						"container_name": "landing",
+						"env": "dev",
+						"schema_mapping": {
+							"value": "@activity('Lookup_config_tbl').output.value.schema_mapping",
+							"type": "Expression"
+						},
+						"schema_name": {
+							"value": "@item().schema_name",
+							"type": "Expression"
+						},
+						"table_name": {
+							"value": "@item().table_name",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_databricks_compute",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"Look_up_output": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}

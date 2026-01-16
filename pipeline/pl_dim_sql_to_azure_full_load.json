@@ -270,6 +270,35 @@
 								"referenceName": "ls_databricks_compute",
 								"type": "LinkedServiceReference"
 							}
+						},
+						{
+							"name": "Trigger_pl_Silver_Ingestion_Full_load",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "on_prem_to_adls",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "pl_Silver_Ingestion_Full_load",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"Look_up_output": {
+										"value": "@activity('Lookup_config_tbl').output.value",
+										"type": "Expression"
+									}
+								}
+							}
 						}
 					]
 				}
