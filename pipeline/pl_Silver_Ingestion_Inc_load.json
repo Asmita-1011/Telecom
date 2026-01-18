@@ -1,5 +1,5 @@
 {
-	"name": "pl_Silver_Ingestion_Full_load",
+	"name": "pl_Silver_Ingestion_Inc_load",
 	"properties": {
 		"activities": [
 			{
@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Workspace/Users/moraxzhongli.gi@gmail.com/DB notbooks/NB silver ingestion",
+					"notebookPath": "/Workspace/Users/moraxzhongli.gi@gmail.com/DB notbooks/NB Silver Ingestion Increamental",
 					"baseParameters": {
 						"catalog_name": {
 							"value": "silver",
@@ -39,6 +39,10 @@
 						},
 						"table_name": {
 							"value": "@pipeline().parameters.table_name",
+							"type": "Expression"
+						},
+						"primary_key": {
+							"value": "@pipeline().parameters.primary_key",
 							"type": "Expression"
 						}
 					}
@@ -174,6 +178,9 @@
 				"type": "string"
 			},
 			"container_name": {
+				"type": "string"
+			},
+			"primary_key": {
 				"type": "string"
 			}
 		},

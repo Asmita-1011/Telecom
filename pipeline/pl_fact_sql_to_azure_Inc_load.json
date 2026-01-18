@@ -126,14 +126,9 @@
 						{
 							"name": "Ingestion to Silver",
 							"type": "DatabricksNotebook",
-							"dependsOn": [
-								{
-									"activity": "on_prem_to_adls",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -277,6 +272,59 @@
 							"linkedServiceName": {
 								"referenceName": "ls_databricks_compute",
 								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Trigger_pl_Silver_Ingestion_Full_load",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "on_prem_to_adls",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "pl_Silver_Ingestion_Inc_load",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"catalog_name": {
+										"value": "@item().container_name",
+										"type": "Expression"
+									},
+									"table_name": {
+										"value": "@item().table_name",
+										"type": "Expression"
+									},
+									"schema_name": {
+										"value": "@item().schema_name",
+										"type": "Expression"
+									},
+									"schema_mapping": {
+										"value": "@item().schema_mapping",
+										"type": "Expression"
+									},
+									"env": {
+										"value": "@pipeline().globalParameters.env",
+										"type": "Expression"
+									},
+									"container_name": {
+										"value": "@item().container_name",
+										"type": "Expression"
+									},
+									"primary_key": {
+										"value": "@item().primary_key",
+										"type": "Expression"
+									}
+								}
 							}
 						}
 					]
