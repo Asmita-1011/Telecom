@@ -17,19 +17,28 @@
 				"typeProperties": {
 					"notebookPath": "/Workspace/Users/moraxzhongli.gi@gmail.com/DB notbooks/NB silver ingestion",
 					"baseParameters": {
-						"catalog_name": "silver",
-						"container_name": "landing",
-						"env": "dev",
+						"catalog_name": {
+							"value": "silver",
+							"type": "Expression"
+						},
+						"container_name": {
+							"value": "landing",
+							"type": "Expression"
+						},
+						"env": {
+							"value": "dev",
+							"type": "Expression"
+						},
 						"schema_mapping": {
-							"value": "@activity('Lookup_config_tbl').output.value.schema_mapping",
+							"value": "@pipeline().parameters.schema_mapping",
 							"type": "Expression"
 						},
 						"schema_name": {
-							"value": "@item().schema_name",
+							"value": "@pipeline().parameters.schema_name",
 							"type": "Expression"
 						},
 						"table_name": {
-							"value": "@item().table_name",
+							"value": "@pipeline().parameters.table_name",
 							"type": "Expression"
 						}
 					}
@@ -41,7 +50,22 @@
 			}
 		],
 		"parameters": {
-			"Look_up_output": {
+			"catalog_name": {
+				"type": "string"
+			},
+			"table_name": {
+				"type": "string"
+			},
+			"schema_name": {
+				"type": "string"
+			},
+			"schema_mapping": {
+				"type": "string"
+			},
+			"env": {
+				"type": "string"
+			},
+			"container_name": {
 				"type": "string"
 			}
 		},

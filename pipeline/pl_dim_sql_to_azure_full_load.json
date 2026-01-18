@@ -122,14 +122,7 @@
 						{
 							"name": "Ingestion to Silver",
 							"type": "DatabricksNotebook",
-							"dependsOn": [
-								{
-									"activity": "on_prem_to_adls",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -293,8 +286,28 @@
 								},
 								"waitOnCompletion": true,
 								"parameters": {
-									"Look_up_output": {
-										"value": "@activity('Lookup_config_tbl').output.value",
+									"catalog_name": {
+										"value": "@item().container_name",
+										"type": "Expression"
+									},
+									"table_name": {
+										"value": "@item().table_name",
+										"type": "Expression"
+									},
+									"schema_name": {
+										"value": "@item().schema_name",
+										"type": "Expression"
+									},
+									"schema_mapping": {
+										"value": "@item().schema_mapping",
+										"type": "Expression"
+									},
+									"env": {
+										"value": "@pipeline().globalParameters.env",
+										"type": "Expression"
+									},
+									"container_name": {
+										"value": "@item().container_name",
 										"type": "Expression"
 									}
 								}
@@ -304,11 +317,6 @@
 				}
 			}
 		],
-		"variables": {
-			"a": {
-				"type": "String"
-			}
-		},
 		"annotations": []
 	}
 }
